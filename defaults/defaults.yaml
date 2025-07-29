@@ -45,35 +45,29 @@ defaults:
               no_community: false
               set_criteria: none
         vpc_domains:
-          domain_id: 1
           admin_state: true
-          auto_recovery: false
-          # auto_recovery_interval: null
-          delay_restore_orphan_port: 0
-          delay_restore_svi: 10
-          delay_restore_vpc: 30
-          dscp: 0
-          fast_convergence: false
-          graceful_consistency_check: true
-          l3_peer_router: false
-          l3_peer_router_syslog: false
-          l3_peer_router_syslog_interval: 3600
-          peer_gateway: false
-          peer_switch: false
-          role_priority: 32667
-          # system_mac: null
-          system_priority: 32667
-          track: 0
-          # virtual_ip: null
-          keepalives:
-            flush_timeout: 3
-            interval: 1000
-            precedence_type: 0
-            precedence_value: 6
-            timeout: 5
-            type_of_service_byte: 0
-            type_of_service_configuration_type: 0
-            type_of_service_type: 0
-            type_of_service_value: 0
-            # udp_port: 3200
-            # vrf: null
+          # auto_recovery: false
+          # delay_restore_orphan_port: 0
+          # delay_restore_svi: 10
+          # delay_restore_vpc: 30
+          # dscp: 0
+          # fast_convergence: false
+          # graceful_consistency_check: true
+          # l3_peer_router: false
+          # l3_peer_router_syslog: false
+          # l3_peer_router_syslog_interval: 3600
+          # peer_gateway: false
+          # peer_switch: false
+          # role_priority: 32667
+          # system_priority: 32667
+          # track: 0
+          # keepalives:
+          #   flush_timeout: 3
+          #   interval: 1000
+          #   precedence_type: 0
+          #   precedence_value: 6
+          #   timeout: 5
+          #   type_of_service_byte: 0
+          #   type_of_service_configuration_type: 0
+          #   type_of_service_type: 0
+          #   type_of_service_value: 0
