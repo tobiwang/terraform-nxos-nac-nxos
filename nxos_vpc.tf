@@ -3,9 +3,9 @@ locals {
   vpc_domains = flatten([
     for device in local.devices : [
       for vpc_domain in try(local.device_config[device.name].vpc_domain, {}) : {
-        key                           = format("%s/%s", device.name, vpc_domain.id)
+        key                           = format("%s/%s", device.name, vpc_domain.domain_id)
         device                        = device.name
-        domain_id                     = vpc_domain.id
+        domain_id                     = vpc_domain.domain_id
         admin_state                   = try(vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, null)
         auto_recovery                 = try(vpc_domain.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, null)
         auto_recovery_interval        = try(vpc_domain.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
