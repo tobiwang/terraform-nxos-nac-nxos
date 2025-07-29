@@ -16,7 +16,7 @@ locals {
         fast_convergence              = try(local.device_config[device.name].vpc_domain.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, false)
         graceful_consistency_check    = try(local.device_config[device.name].vpc_domain.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, false)
         l3_peer_router                = try(local.device_config[device.name].vpc_domain.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, null)
-        l3_peer_router_syslog         = try(local.device_config[device.name].vpc_domain.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
+        l3_peer_router_syslog         = try(local.device_config[device.name].vpc_domain.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, false)
         l3_peer_router_syslog_interval = try(local.device_config[device.name].vpc_domain.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
         peer_gateway                  = try(local.device_config[device.name].vpc_domain.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, false)
         peer_ip                       = try(local.device_config[device.name].vpc_domain.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
@@ -46,7 +46,7 @@ resource "nxos_vpc_domain" "vpc_domain" {
   fast_convergence                = try(each.value.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, false) ? "enabled" : "disabled"
   graceful_consistency_check      = try(each.value.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, false) ? "enabled" : "disabled"
   l3_peer_router                  = try(each.value.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, false) ? "enabled" : "disabled"
-  l3_peer_router_syslog           = try(each.value.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
+  l3_peer_router_syslog           = try(each.value.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, false) ? "enabled" : "disabled"
   l3_peer_router_syslog_interval  = try(each.value.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
   peer_gateway                    = try(each.value.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, false) ? "enabled" : "disabled"
   peer_ip                         = try(each.value.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
