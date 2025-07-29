@@ -132,7 +132,7 @@ locals {
     ]
   ])
 
-  all_vpc_interfaces = concat(local.vpc_interfaces_ethernets, local.vpc_interfaces_port_channels)
+#   all_vpc_interfaces = concat(local.vpc_interfaces_ethernets, local.vpc_interfaces_port_channels)
 }
 
 resource "nxos_vpc_interface" "vpc_interface" {
