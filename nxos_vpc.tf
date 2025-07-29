@@ -1,0 +1,174 @@
+# VPC Domain Configuration
+locals {
+  vpc_domains = flatten([
+    for device in local.devices : [
+      for vpc_domain in try(local.device_config[device.name].vpc_domain, {}) : {
+        key                           = format("%s/%s", device.name, vpc_domain.id)
+        device                        = device.name
+        domain_id                     = vpc_domain.id
+        admin_state                   = try(vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, null)
+        auto_recovery                 = try(vpc_domain.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, null)
+        auto_recovery_interval        = try(vpc_domain.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
+        delay_restore_orphan_port     = try(vpc_domain.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, null)
+        delay_restore_svi             = try(vpc_domain.delay_restore_svi, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_svi, null)
+        delay_restore_vpc             = try(vpc_domain.delay_restore_vpc, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_vpc, null)
+        dscp                          = try(vpc_domain.dscp, local.defaults.nxos.devices.configuration.vpc_domains.dscp, null)
+        fast_convergence              = try(vpc_domain.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, null)
+        graceful_consistency_check    = try(vpc_domain.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, null)
+        l3_peer_router                = try(vpc_domain.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, null)
+        l3_peer_router_syslog         = try(vpc_domain.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
+        l3_peer_router_syslog_interval = try(vpc_domain.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
+        peer_gateway                  = try(vpc_domain.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, null)
+        peer_ip                       = try(vpc_domain.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
+        peer_switch                   = try(vpc_domain.peer_switch, local.defaults.nxos.devices.configuration.vpc_domains.peer_switch, null)
+        role_priority                 = try(vpc_domain.role_priority, local.defaults.nxos.devices.configuration.vpc_domains.role_priority, null)
+        system_mac                       = try(vpc_domain.system_mac, local.defaults.nxos.devices.configuration.vpc_domains.system_mac, null)
+        system_priority               = try(vpc_domain.system_priority, local.defaults.nxos.devices.configuration.vpc_domains.system_priority, null)
+        track                         = try(vpc_domain.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
+        virtual_ip                    = try(vpc_domain.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
+      }
+    ]
+  ])
+}
+
+resource "nxos_vpc_domain" "vpc_domain" {
+  for_each                        = { for vpc_domain in local.vpc_domains : vpc_domain.key => vpc_domain }
+  device                          = each.value.device
+  domain_id                       = each.value.domain_id
+  admin_state                     = try(each.value.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, "enabled")
+  auto_recovery                   = try(each.value.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, null)
+  auto_recovery_interval          = try(each.value.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
+  delay_restore_orphan_port       = try(each.value.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, null)
+  delay_restore_svi               = try(each.value.delay_restore_svi, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_svi, null)
+  delay_restore_vpc               = try(each.value.delay_restore_vpc, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_vpc, null)
+  dscp                            = try(each.value.dscp, local.defaults.nxos.devices.configuration.vpc_domains.dscp, null)
+  fast_convergence                = try(each.value.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, null)
+  graceful_consistency_check      = try(each.value.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, null)
+  l3_peer_router                  = try(each.value.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, null)
+  l3_peer_router_syslog           = try(each.value.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
+  l3_peer_router_syslog_interval  = try(each.value.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
+  peer_gateway                    = try(each.value.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, null)
+  peer_ip                         = try(each.value.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
+  peer_switch                     = try(each.value.peer_switch, local.defaults.nxos.devices.configuration.vpc_domains.peer_switch, null)
+  role_priority                   = try(each.value.role_priority, local.defaults.nxos.devices.configuration.vpc_domains.role_priority, null)
+  sys_mac                         = try(each.value.system_mac, local.defaults.nxos.devices.configuration.vpc_domains.system_mac, null)
+  system_priority                 = try(each.value.system_priority, local.defaults.nxos.devices.configuration.vpc_domains.system_priority, null)
+  track                           = try(each.value.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
+  virtual_ip                      = try(each.value.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
+
+  depends_on = [
+    nxos_feature_vpc.vpc
+  ]
+}
+
+# VPC Keepalive Configuration
+# locals {
+#   vpc_keepalives = flatten([
+#     for device in local.devices : [
+#       for vpc_domain in try(local.device_config[device.name].vpc_domain, {}) : [
+#         for keepalive in try(vpc_domain.keepalives, []) : {
+#           key                                      = format("%s/%s", device.name, vpc_domain.id)
+#           device                                   = device.name
+#           destination_ip                           = keepalive.destination_ip
+#           source_ip                                = keepalive.source_ip
+#           flush_timeout                            = try(keepalive.flush_timeout, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.flush_timeout, null)
+#           interval                                 = try(keepalive.interval, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.interval, null)
+#           precedence_type                          = try(keepalive.precedence_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.precedence_type, null)
+#           precedence_value                         = try(keepalive.precedence_value, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.precedence_value, null)
+#           timeout                                  = try(keepalive.timeout, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.timeout, null)
+#           type_of_service_byte                     = try(keepalive.type_of_service_byte, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_byte, null)
+#           type_of_service_configuration_type       = try(keepalive.type_of_service_configuration_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_configuration_type, null)
+#           type_of_service_type                     = try(keepalive.type_of_service_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_type, null)
+#           type_of_service_value                    = try(keepalive.type_of_service_value, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_value, null)
+#           udp_port                                 = try(keepalive.udp_port, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.udp_port, null)
+#           vrf                                      = try(keepalive.vrf, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.vrf, null)
+#         }
+#       ]
+#     ]
+#   ])
+# }
+
+resource "nxos_vpc_keepalive" "vpc_keepalive" {
+  for_each                           = { for vpc_domain in local.vpc_domains : vpc_domain.key => vpc_domain }
+#   for_each                           = { for keepalive in local.vpc_keepalives : keepalive.key => keepalive }
+  device                             = each.value.device
+  destination_ip                     = try(each.value.peer_keepalive.destination_ip, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.destination_ip, null)
+  source_ip                          = try(each.value.peer_keepalive.source_ip, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.source_ip, null)
+  flush_timeout                      = try(each.value.peer_keepalive.flush_timeout, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.flush_timeout, null)
+  interval                           = try(each.value.peer_keepalive.interval, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.interval, null)
+  precedence_type                    = try(each.value.peer_keepalive.precedence_type, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.precedence_type, null)
+  precedence_value                   = try(each.value.peer_keepalive.precedence_value, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.precedence_value, null)
+  timeout                            = try(each.value.peer_keepalive.timeout, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.timeout, null)
+  type_of_service_byte               = try(each.value.peer_keepalive.type_of_service_byte, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.type_of_service_byte, null)
+  type_of_service_configuration_type = try(each.value.peer_keepalive.type_of_service_configuration_type, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.type_of_service_configuration_type, null)
+  type_of_service_type               = try(each.value.peer_keepalive.type_of_service_type, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.type_of_service_type, null)
+  type_of_service_value              = try(each.value.peer_keepalive.type_of_service_value, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.type_of_service_value, null)
+  udp_port                           = try(each.value.peer_keepalive.udp_port, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.udp_port, null)
+  vrf                                = try(each.value.peer_keepalive.vrf, local.defaults.nxos.devices.configuration.vpc_domains.keepalives.vrf, null)
+
+  depends_on = [
+    nxos_vpc_domain.vpc_domain
+  ]
+}
+
+# VPC Peerlink Configuration
+locals {
+  vpc_peerlinks = flatten([
+    for device in local.devices : [
+      for int in try(local.device_config[device.name].interfaces.port_channels, []) : {
+        key               = format("%s/%s", device.name, int.id)
+        device            = device.name
+        port_channel_id   = int.id
+      } if try(int.vpc_peerlink, false) == true
+    ]
+  ])
+}
+
+resource "nxos_vpc_peerlink" "vpc_peerlink" {
+  for_each        = { for peerlink in local.vpc_peerlinks : peerlink.key => peerlink }
+  device          = each.value.device
+  port_channel_id = each.value.port_channel_id
+
+  depends_on = [
+    nxos_vpc_keepalive.vpc_keepalive
+  ]
+}
+
+# VPC Interface Configuration
+locals {
+  vpc_interfaces_ethernets = flatten([
+    for device in local.devices : [
+      for int in try(local.device_config[device.name].interfaces.ethernets, []) : {
+        key                          = format("%s/%s", device.name, int.id)
+        device                       = device.name
+        vpc_interface_id             = int.vpc.vpc_id
+        port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.vpc.vpc_id)
+      } if try(int.vpc.vpc_id, null) != null
+    ]
+  ])
+
+  vpc_interfaces_port_channels = flatten([
+    for device in local.devices : [
+      for int in try(local.device_config[device.name].interfaces.port_channels, []) : {
+        key                          = format("%s/%s", device.name, int.id)
+        device                       = device.name
+        vpc_interface_id             = int.vpc.vpc_id
+        port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.id)
+      } if try(int.vpc.vpc_id, null) != null && try(int.vpc.peer_link, false) == false
+    ]
+  ])
+
+  all_vpc_interfaces = concat(local.vpc_interfaces_ethernets, local.vpc_interfaces_port_channels)
+}
+
+resource "nxos_vpc_interface" "vpc_interface" {
+  for_each                  = { for int in local.all_vpc_interfaces : int.key => int }
+  device                    = each.value.device
+  vpc_interface_id          = each.value.vpc_interface_id
+  port_channel_interface_dn = each.value.port_channel_interface_dn
+
+  depends_on = [
+    nxos_vpc_domain.vpc_domain,
+    nxos_physical_interface.physical_interface
+  ]
+}
