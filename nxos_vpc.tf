@@ -2,32 +2,33 @@
 locals {
   vpc_domains = flatten([
     for device in local.devices : [
-      for vpc_domain in try(local.device_config[device.name].vpc_domain, {}) : {
-        key                           = format("%s/%s", device.name, vpc_domain.domain_id)
+      try(local.device_config[device.name].vpc_domain, null) != null ? {
+        key                           = format("%s/%s", device.name, try(local.device_config[device.name].vpc_domain.domain_id, "default"))
         device                        = device.name
-        domain_id                     = vpc_domain.domain_id
-        admin_state                   = try(vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, null)
-        auto_recovery                 = try(vpc_domain.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, null)
-        auto_recovery_interval        = try(vpc_domain.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
-        delay_restore_orphan_port     = try(vpc_domain.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, null)
-        delay_restore_svi             = try(vpc_domain.delay_restore_svi, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_svi, null)
-        delay_restore_vpc             = try(vpc_domain.delay_restore_vpc, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_vpc, null)
-        dscp                          = try(vpc_domain.dscp, local.defaults.nxos.devices.configuration.vpc_domains.dscp, null)
-        fast_convergence              = try(vpc_domain.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, null)
-        graceful_consistency_check    = try(vpc_domain.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, null)
-        l3_peer_router                = try(vpc_domain.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, null)
-        l3_peer_router_syslog         = try(vpc_domain.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
-        l3_peer_router_syslog_interval = try(vpc_domain.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
-        peer_gateway                  = try(vpc_domain.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, null)
-        peer_ip                       = try(vpc_domain.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
-        peer_switch                   = try(vpc_domain.peer_switch, local.defaults.nxos.devices.configuration.vpc_domains.peer_switch, null)
-        role_priority                 = try(vpc_domain.role_priority, local.defaults.nxos.devices.configuration.vpc_domains.role_priority, null)
-        system_mac                       = try(vpc_domain.system_mac, local.defaults.nxos.devices.configuration.vpc_domains.system_mac, null)
-        system_priority               = try(vpc_domain.system_priority, local.defaults.nxos.devices.configuration.vpc_domains.system_priority, null)
-        track                         = try(vpc_domain.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
-        virtual_ip                    = try(vpc_domain.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
-      }
-    ]
+        domain_id                     = try(local.device_config[device.name].vpc_domain.domain_id, local.defaults.nxos.devices.configuration.vpc_domains.domain_id, null)
+        admin_state                   = try(local.device_config[device.name].vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, null)
+        auto_recovery                 = try(local.device_config[device.name].vpc_domain.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, null)
+        auto_recovery_interval        = try(local.device_config[device.name].vpc_domain.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
+        delay_restore_orphan_port     = try(local.device_config[device.name].vpc_domain.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, null)
+        delay_restore_svi             = try(local.device_config[device.name].vpc_domain.delay_restore_svi, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_svi, null)
+        delay_restore_vpc             = try(local.device_config[device.name].vpc_domain.delay_restore_vpc, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_vpc, null)
+        dscp                          = try(local.device_config[device.name].vpc_domain.dscp, local.defaults.nxos.devices.configuration.vpc_domains.dscp, null)
+        fast_convergence              = try(local.device_config[device.name].vpc_domain.fast_convergence, local.defaults.nxos.devices.configuration.vpc_domains.fast_convergence, null)
+        graceful_consistency_check    = try(local.device_config[device.name].vpc_domain.graceful_consistency_check, local.defaults.nxos.devices.configuration.vpc_domains.graceful_consistency_check, null)
+        l3_peer_router                = try(local.device_config[device.name].vpc_domain.l3_peer_router, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router, null)
+        l3_peer_router_syslog         = try(local.device_config[device.name].vpc_domain.l3_peer_router_syslog, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog, null)
+        l3_peer_router_syslog_interval = try(local.device_config[device.name].vpc_domain.l3_peer_router_syslog_interval, local.defaults.nxos.devices.configuration.vpc_domains.l3_peer_router_syslog_interval, null)
+        peer_gateway                  = try(local.device_config[device.name].vpc_domain.peer_gateway, local.defaults.nxos.devices.configuration.vpc_domains.peer_gateway, null)
+        peer_ip                       = try(local.device_config[device.name].vpc_domain.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
+        peer_switch                   = try(local.device_config[device.name].vpc_domain.peer_switch, local.defaults.nxos.devices.configuration.vpc_domains.peer_switch, null)
+        role_priority                 = try(local.device_config[device.name].vpc_domain.role_priority, local.defaults.nxos.devices.configuration.vpc_domains.role_priority, null)
+        system_mac                    = try(local.device_config[device.name].vpc_domain.system_mac, local.defaults.nxos.devices.configuration.vpc_domains.system_mac, null)
+        system_priority               = try(local.device_config[device.name].vpc_domain.system_priority, local.defaults.nxos.devices.configuration.vpc_domains.system_priority, null)
+        track                         = try(local.device_config[device.name].vpc_domain.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
+        virtual_ip                    = try(local.device_config[device.name].vpc_domain.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
+        peer_keepalive                = try(local.device_config[device.name].vpc_domain.peer_keepalive, {})
+      } : null
+    ] if try(local.device_config[device.name].vpc_domain, null) != null
   ])
 }
 
@@ -154,7 +155,7 @@ locals {
         device                       = device.name
         vpc_interface_id             = int.vpc.vpc_id
         port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.id)
-      } if try(int.vpc.vpc_id, null) != null && try(int.vpc.peer_link, false) == false
+      } if try(int.vpc.vpc_id, null) != null && try(int.vpc_peerlink, false) == false
     ]
   ])
 
