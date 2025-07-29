@@ -9,7 +9,7 @@ locals {
         admin_state                   = try(local.device_config[device.name].vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, true)
         auto_recovery                 = try(local.device_config[device.name].vpc_domain.auto_recovery, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery, false)
         auto_recovery_interval        = try(local.device_config[device.name].vpc_domain.auto_recovery_interval, local.defaults.nxos.devices.configuration.vpc_domains.auto_recovery_interval, null)
-        delay_restore_orphan_port     = try(local.device_config[device.name].vpc_domain.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, false)
+        delay_restore_orphan_port     = try(local.device_config[device.name].vpc_domain.delay_restore_orphan_port, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_orphan_port, null)
         delay_restore_svi             = try(local.device_config[device.name].vpc_domain.delay_restore_svi, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_svi, null)
         delay_restore_vpc             = try(local.device_config[device.name].vpc_domain.delay_restore_vpc, local.defaults.nxos.devices.configuration.vpc_domains.delay_restore_vpc, null)
         dscp                          = try(local.device_config[device.name].vpc_domain.dscp, local.defaults.nxos.devices.configuration.vpc_domains.dscp, null)
