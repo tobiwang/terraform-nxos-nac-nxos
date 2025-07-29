@@ -115,9 +115,9 @@ locals {
       for int in try(local.device_config[device.name].interfaces.ethernets, []) : {
         key                          = format("%s/%s", device.name, int.id)
         device                       = device.name
-        vpc_interface_id             = int.vpc.vpc_id
-        port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.vpc.vpc_id)
-      } if try(int.vpc.vpc_id, null) != null
+        vpc_interface_id             = int.vpc_id
+        port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.vpc_id)
+      } if try(int.vpc_id, null) != null
     ]
   ])
 
@@ -126,9 +126,9 @@ locals {
       for int in try(local.device_config[device.name].interfaces.port_channels, []) : {
         key                          = format("%s/%s", device.name, int.id)
         device                       = device.name
-        vpc_interface_id             = int.vpc.vpc_id
+        vpc_interface_id             = int.vpc_id
         port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.id)
-      } if try(int.vpc.vpc_id, null) != null && try(int.vpc_peerlink, false) == false
+      } if try(int.vpc_id, null) != null && try(int.vpc_peerlink, false) == false
     ]
   ])
 
