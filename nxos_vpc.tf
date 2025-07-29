@@ -101,7 +101,7 @@ locals {
 resource "nxos_vpc_peerlink" "vpc_peerlink" {
   for_each        = { for peerlink in local.vpc_peerlinks : peerlink.key => peerlink }
   device          = each.value.device
-  port_channel_id = each.value.port_channel_id
+  port_channel_id   = format("po%s", each.value.port_channel_id)
 
   depends_on = [
     nxos_vpc_keepalive.vpc_keepalive
