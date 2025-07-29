@@ -22,7 +22,7 @@ locals {
         peer_ip                       = try(local.device_config[device.name].vpc_domain.peer_ip, local.defaults.nxos.devices.configuration.vpc_domains.peer_ip, null)
         peer_switch                   = try(local.device_config[device.name].vpc_domain.peer_switch, local.defaults.nxos.devices.configuration.vpc_domains.peer_switch, false)
         role_priority                 = try(local.device_config[device.name].vpc_domain.role_priority, local.defaults.nxos.devices.configuration.vpc_domains.role_priority, null)
-        system_mac                    = try(local.device_config[device.name].vpc_domain.system_mac, local.defaults.nxos.devices.configuration.vpc_domains.system_mac, null)
+        system_mac                    = try(upper(local.device_config[device.name].vpc_domain.system_mac), upper(local.defaults.nxos.devices.configuration.vpc_domains.system_mac), null)
         system_priority               = try(local.device_config[device.name].vpc_domain.system_priority, local.defaults.nxos.devices.configuration.vpc_domains.system_priority, null)
         track                         = try(local.device_config[device.name].vpc_domain.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
         virtual_ip                    = try(local.device_config[device.name].vpc_domain.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
