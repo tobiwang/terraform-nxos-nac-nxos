@@ -110,16 +110,16 @@ resource "nxos_vpc_peerlink" "vpc_peerlink" {
 
 # VPC Interface Configuration
 locals {
-  vpc_interfaces_ethernets = flatten([
-    for device in local.devices : [
-      for int in try(local.device_config[device.name].interfaces.ethernets, []) : {
-        key                          = format("%s/%s", device.name, int.id)
-        device                       = device.name
-        vpc_interface_id             = int.vpc_id
-        port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.vpc_id)
-      } if try(int.vpc_id, null) != null
-    ]
-  ])
+#   vpc_interfaces_ethernets = flatten([
+#     for device in local.devices : [
+#       for int in try(local.device_config[device.name].interfaces.ethernets, []) : {
+#         key                          = format("%s/%s", device.name, int.id)
+#         device                       = device.name
+#         vpc_interface_id             = int.vpc_id
+#         port_channel_interface_dn    = format("sys/intf/aggr-[po%s]", int.vpc_id)
+#       } if try(int.vpc_id, null) != null
+#     ]
+#   ])
 
   vpc_interfaces_port_channels = flatten([
     for device in local.devices : [
@@ -136,13 +136,15 @@ locals {
 }
 
 resource "nxos_vpc_interface" "vpc_interface" {
-  for_each                  = { for int in local.all_vpc_interfaces : int.key => int }
+#   for_each                  = { for int in local.all_vpc_interfaces : int.key => int }
+  for_each                  = { for int in local.vpc_interfaces_port_channels : int.key => int }
   device                    = each.value.device
   vpc_interface_id          = each.value.vpc_interface_id
   port_channel_interface_dn = each.value.port_channel_interface_dn
 
   depends_on = [
     nxos_vpc_domain.vpc_domain,
-    nxos_physical_interface.physical_interface
+    # nxos_physical_interface.physical_interface,
+    nxos_port_channel_interface.port_channel_interface
   ]
 }
