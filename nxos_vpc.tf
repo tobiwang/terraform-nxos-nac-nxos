@@ -62,33 +62,6 @@ resource "nxos_vpc_domain" "vpc_domain" {
   ]
 }
 
-# VPC Keepalive Configuration
-# locals {
-#   vpc_keepalives = flatten([
-#     for device in local.devices : [
-#       for vpc_domain in try(local.device_config[device.name].vpc_domain, {}) : [
-#         for keepalive in try(vpc_domain.keepalives, []) : {
-#           key                                      = format("%s/%s", device.name, vpc_domain.id)
-#           device                                   = device.name
-#           destination_ip                           = keepalive.destination_ip
-#           source_ip                                = keepalive.source_ip
-#           flush_timeout                            = try(keepalive.flush_timeout, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.flush_timeout, null)
-#           interval                                 = try(keepalive.interval, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.interval, null)
-#           precedence_type                          = try(keepalive.precedence_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.precedence_type, null)
-#           precedence_value                         = try(keepalive.precedence_value, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.precedence_value, null)
-#           timeout                                  = try(keepalive.timeout, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.timeout, null)
-#           type_of_service_byte                     = try(keepalive.type_of_service_byte, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_byte, null)
-#           type_of_service_configuration_type       = try(keepalive.type_of_service_configuration_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_configuration_type, null)
-#           type_of_service_type                     = try(keepalive.type_of_service_type, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_type, null)
-#           type_of_service_value                    = try(keepalive.type_of_service_value, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.type_of_service_value, null)
-#           udp_port                                 = try(keepalive.udp_port, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.udp_port, null)
-#           vrf                                      = try(keepalive.vrf, local.defaults.nxos.devices.configuration.vpc.domains.keepalives.vrf, null)
-#         }
-#       ]
-#     ]
-#   ])
-# }
-
 resource "nxos_vpc_keepalive" "vpc_keepalive" {
   for_each                           = { for vpc_domain in local.vpc_domains : vpc_domain.key => vpc_domain }
 #   for_each                           = { for keepalive in local.vpc_keepalives : keepalive.key => keepalive }
