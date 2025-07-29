@@ -2,8 +2,8 @@
 locals {
   vpc_domains = flatten([
     for device in local.devices : [
-      try(local.device_config[device.name].vpc_domain, null) != null ? {
-        key                           = format("%s/%s", device.name, try(local.device_config[device.name].vpc_domain.domain_id, "default"))
+      {
+        key                           = format("%s/%s", device.name, local.device_config[device.name].vpc_domain.domain_id)
         device                        = device.name
         domain_id                     = try(local.device_config[device.name].vpc_domain.domain_id, local.defaults.nxos.devices.configuration.vpc_domains.domain_id, null)
         admin_state                   = try(local.device_config[device.name].vpc_domain.admin_state, local.defaults.nxos.devices.configuration.vpc_domains.admin_state, null)
@@ -27,7 +27,7 @@ locals {
         track                         = try(local.device_config[device.name].vpc_domain.track, local.defaults.nxos.devices.configuration.vpc_domains.track, null)
         virtual_ip                    = try(local.device_config[device.name].vpc_domain.virtual_ip, local.defaults.nxos.devices.configuration.vpc_domains.virtual_ip, null)
         peer_keepalive                = try(local.device_config[device.name].vpc_domain.peer_keepalive, {})
-      } : null
+      }
     ] if try(local.device_config[device.name].vpc_domain, null) != null
   ])
 }
