@@ -27,8 +27,8 @@ defaults:
           bgp:
             vrfs:
               admin_state: true
-              restart_interval: 0
-              stale_interval: 0
+              graceful_restart_stalepath_time: 0
+              graceful_restart_restart_time: 0
           ospf_processes:
             vrfs:
               admin_state: true
