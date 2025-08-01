@@ -24,6 +24,11 @@ defaults:
           pim:
             vrfs:
               admin_state: true
+          bgp:
+            vrfs:
+              admin_state: true
+              restart_interval: 0
+              stale_interval: 0
           ospf_processes:
             vrfs:
               admin_state: true
@@ -52,5 +57,6 @@ defaults:
           peer_keepalive:
             interval: 1000
             timeout: 5
-            precedence_type: 6
+            precedence_type: 0
             precedence_value: 6
+
