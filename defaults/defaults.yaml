@@ -47,9 +47,10 @@ defaults:
           delay_restore_vpc: 30
           delay_restore_svi: 45
           delay_restore_orphan_port: 0
+          fast_convergence: true
+          l3_peer_router_syslog: true
           peer_keepalive:
             interval: 1000
             timeout: 5
             precedence_type: 6
             precedence_value: 6
-
