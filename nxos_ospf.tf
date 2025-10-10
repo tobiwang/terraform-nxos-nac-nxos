@@ -102,7 +102,7 @@ resource "nxos_ospf_interface" "ospf_interface" {
   for_each              = { for v in local.ospf_interfaces : v.key => v if try(v.ospf_process_name, null) != null }
   device                = each.value.device
   instance_name         = each.value.ospf_process_name
-  vrf_name              = nxos_ospf_vrf.ospf_vrf["${each.value.device}/${each.value.ospf_process_name}/${each.value.vrf}"].name
+  vrf_name              = each.value.vrf
   interface_id          = "${each.value.type}${each.value.id}"
   advertise_secondaries = each.value.ospf_advertise_secondaries
   area                  = each.value.ospf_area
