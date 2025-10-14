@@ -7,7 +7,7 @@ terraform {
       version = ">= 0.5.9"
     }
     utils = {
-      source  = "providers/netascode/utils"
+      source  = "netascode/utils"
       version = ">= 0.2.6"
     }
     local = {
